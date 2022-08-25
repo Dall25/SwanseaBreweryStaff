@@ -1,0 +1,44 @@
+﻿@model Models.PagedResults<List<Models.Entities.User>, Models.Constants.ConstantStrings>
+<div id="userResults">
+    <table class="table" id="userResults">
+        <thead>
+            <tr>
+                <th><a onclick="SortTable('@Model.TableControls.Sorting.SortingFields.FIRST_NAME', @(Model.TableControls.Sorting.SortDirection == "asc" ? "'desc'" : "'asc'"))">First Name @((Model.TableControls.Sorting.SortColumn == Model.TableControls.Sorting.SortingFields.FIRST_NAME ? (Model.TableControls.Sorting.SortDirection == "asc" ? "↑" : Model.TableControls.Sorting.SortDirection == "desc" ? "↓": "") : ""))</a></th>
+                <th><a onclick="SortTable('@Model.TableControls.Sorting.SortingFields.LAST_NAME', @(Model.TableControls.Sorting.SortDirection == "asc" ? "'desc'" : "'asc'"))">Last Name @((Model.TableControls.Sorting.SortColumn == Model.TableControls.Sorting.SortingFields.LAST_NAME ? (Model.TableControls.Sorting.SortDirection == "asc" ? "↑" : Model.TableControls.Sorting.SortDirection == "desc" ? "↓": "") : ""))</a></th>
+                <th><a onclick="SortTable('@Model.TableControls.Sorting.SortingFields.USER_SECTION', @(Model.TableControls.Sorting.SortDirection == "asc" ? "'desc'" : "'asc'"))">User Section @((Model.TableControls.Sorting.SortColumn == Model.TableControls.Sorting.SortingFields.USER_SECTION ? (Model.TableControls.Sorting.SortDirection == "asc" ? "↑" : Model.TableControls.Sorting.SortDirection == "desc" ? "↓": "") : ""))</a></th>
+                <th><a onclick="SortTable('@Model.TableControls.Sorting.SortingFields.USER_TYPE', @(Model.TableControls.Sorting.SortDirection == "asc" ? "'desc'" : "'asc'"))">User Type @((Model.TableControls.Sorting.SortColumn == Model.TableControls.Sorting.SortingFields.USER_TYPE ? (Model.TableControls.Sorting.SortDirection == "asc" ? "↑" : Model.TableControls.Sorting.SortDirection == "desc" ? "↓": "") : ""))</a></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Results)
+            {
+                <tr>
+                    <td>
+                        <label>@item.FirstName</label>
+                    </td>
+                    <td>
+                        <label>@item.LastName</label>
+                    </td>
+                    <td>
+                        <label>@item.UserType?.Name</label>
+                    </td>
+                    <td>
+                        <label>@item.UserSection?.Name</label>
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-userId="@item.UserId">Edit</a>
+                    </td>
+                     <td>
+                        <form asp-action="Delete" asp-route-userId="@item.UserId" 
+                        onclick="return confirm('Are you sure you want to delete this?')">
+                        <button type="submit" class="btn btn-default"><i class="fas fa-trash-alt text-white"></i>Delete</button>
+                       </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <partial name="_PagingPartial" for="@Model.TableControls" />
+</div>

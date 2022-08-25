@@ -1,0 +1,67 @@
+﻿@model Models.ViewModels.UserListViewModel
+@{
+    ViewData["Title"] = "User page";
+}
+
+
+<script type="text/javascript">
+    function SortTable(sortColumn, sortDirection, currentPage = 1) {
+        $.ajax({
+            async: false,
+            url: "@Url.Action("SortUserResultsTable")",
+            data: { sortColumn: sortColumn, sortDirection: sortDirection, CurrentPage: currentPage},
+            type: 'GET',
+            success: function (data) {
+                $("#userResults").html(data);
+            }
+        });
+    }
+</script>
+<div class="text-center">
+    <h1 class="display-4">User List</h1>
+    <form asp-action="Index">
+        <input asp-for="@Model.UserResults.TableControls.Paging.CurrentPage" type="hidden" />
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label class="control-label float-start">First Name</label>
+                    <input asp-for="@Model.FirstName" class="form-control" />
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="@Model.LastName float-start" class="control-label float-start">Last Name</label>
+                    <input asp-for="@Model.LastName" class="form-control" />
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="@Model.SelectedUserTypeId" class="control-label float-start">User Type</label>
+                    <select asp-items="@(new SelectList(Model.UserTypeList, "UserTypeId", "Name", Model.SelectedUserTypeId))" asp-for="@Model.SelectedUserTypeId" class="form-control">
+                        <option value="0">Select Option</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="@Model.SelectedUserSectionId" class="control-label float-start">User Section</label>
+                    <select asp-items="@(new SelectList(Model.UserSectionList, "UserSectionId", "Name", Model.SelectedUserSectionId))" asp-for="@Model.SelectedUserSectionId" class="form-control">
+                        <option value="0">Select Option</option>
+                    </select>
+
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-end mt-3">
+            <div class="col">
+                <a class="btn btn-primary float-end ms-3" asp-action="Create">Create User</a>
+                <button type="submit" class="btn btn-primary float-end ms-3">Search Users</button>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <partial name="_UserResults" for="@Model.UserResults" />
+    </div>
+
+
+
